@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 #
+# https://github.com/benjaminlin/mysql_cache_prewarm/blob/master/prewarm_mysql_cache.pl
+#
 # This library will help you pre-warm MySQL cache for MyISAM and InnoDB 
 # tables. Two storage engines have different pre-warm strategy. 
 #
@@ -72,7 +74,7 @@ if( @$myisam )
     &Debug( "Table: " . $t );
     next if( exists( $IGNORE_TABLES{$t} ) );
     
-    my $sSQL = "LOAD INDEX INTO CACHE $t";
+    my $sSQL = "LOAD INDEX INTO CACHE `$t`";
     
     &Debug($sSQL);
     my $sth = $dbh->prepare($sSQL) 
@@ -119,13 +121,13 @@ if( @$innodb )
       if( $non_indexed_column )
       {
         $sFullTableScanSQL
-          = "SELECT COUNT(*) FROM $current_t "
-          . "WHERE $non_indexed_column = 0";
+          = "SELECT COUNT(*) FROM `$current_t` "
+          . "WHERE `$non_indexed_column` = 0";
       }
       else
       {
         $sFullTableScanSQL
-          = "SELECT COUNT(*) FROM $current_t";          
+          = "SELECT COUNT(*) FROM `$current_t`";          
       }
         
       &Debug("Full table scan");  
@@ -147,9 +149,9 @@ if( @$innodb )
     
     my $sSecondaryIndexTraverseSQL 
       = "SELECT COUNT(*) FROM $current_t "
-      . "WHERE "
+      . "WHERE `"
       . $secondary_index_first_columns[0] 
-      . " LIKE '%0%';";
+      . "` LIKE '%0%';";
       
     &Debug($sSecondaryIndexTraverseSQL);
     my $sth = $dbh->prepare($sSecondaryIndexTraverseSQL) 
