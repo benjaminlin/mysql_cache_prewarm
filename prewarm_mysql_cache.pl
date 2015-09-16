@@ -1,7 +1,5 @@
 #!/usr/bin/perl
 #
-# https://github.com/benjaminlin/mysql_cache_prewarm/blob/master/prewarm_mysql_cache.pl
-#
 # This library will help you pre-warm MySQL cache for MyISAM and InnoDB 
 # tables. Two storage engines have different pre-warm strategy. 
 #
@@ -148,7 +146,7 @@ if( @$innodb )
          . "' traversing");
     
     my $sSecondaryIndexTraverseSQL 
-      = "SELECT COUNT(*) FROM $current_t "
+      = "SELECT COUNT(*) FROM `$current_t` "
       . "WHERE `"
       . $secondary_index_first_columns[0] 
       . "` LIKE '%0%';";
