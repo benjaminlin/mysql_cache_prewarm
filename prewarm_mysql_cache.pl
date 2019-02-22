@@ -27,6 +27,7 @@ use Time::HiRes qw/ time /;
 use Data::Dumper;
 use Getopt::Std;
 use POSIX qw(strftime);
+use Term::ReadKey;
 
 my $my_db;
 my $my_table; # optional
@@ -278,7 +279,9 @@ sub init( )
   if( $OPTIONS{'p'} )
   {    
     print "Password:";
+    ReadMode('noecho');
     chomp($my_password = <STDIN>);   
+    ReadMode(0);
   }
   
   if( exists( $OPTIONS{'t'} ) )
